@@ -25,8 +25,8 @@ MCUX_TOOLS=$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.macosx_11.5.0.2021070511
 MCUX_TOOLSBIN=$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.bin.macosx_11.5.0.202112161150/binaries
 
 #Uncomment if you want to use the m1 native compilers, but tbh the speed gain is minimal and may have bugs
-LDFLAGS=-L$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.macosx_11.5.0.202107051138/tools/arm-none-eabi/lib/thumb/v7e-m+dp/hard/
-MCUX_TOOLS=../m1-arm-embedded/xpack-arm-none-eabi-gcc-10.3.1-2.3
+#LDFLAGS=-L$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.macosx_11.5.0.202107051138/tools/arm-none-eabi/lib/thumb/v7e-m+dp/hard/
+#MCUX_TOOLS=../m1-arm-embedded/xpack-arm-none-eabi-gcc-10.3.1-2.3
 
 # Set parallel flag to # of CPUs
 CPUS ?= $(shell sysctl -n hw.ncpu || echo 1)
