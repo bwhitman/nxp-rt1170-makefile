@@ -1,6 +1,6 @@
 # Makefile for NXP RT1170 / Maaxboard demo
 
-This is a Make-based toolchain for the NXP RT1170 series of MCUs that avoids using the MCUxpresso tool system as much as possible. I'm more comfortable developing this way and thought I'd put in the work to get a make-based toolchain going instead of using the Eclipse-based IDE.
+This is a Make-based toolchain for the NXP RT1170 / 1176 series of 1GHz MCUs that avoids using the MCUxpresso tool system as much as possible. I'm more comfortable developing this way and thought I'd put in the work to get a make-based toolchain going instead of using the Eclipse-based IDE.
 
 This particular example project contains and builds the [baked-in demo](https://github.com/Avnet/MaaXBoard-RT-V3--GUI-Demo) of the AVNet "Maaxboard RT", which is an otherwise quite good RT1170 dev board. But it should work for the RT1170 EVK or other related boards. You may have to swap out the flash drivers, etc.
 
