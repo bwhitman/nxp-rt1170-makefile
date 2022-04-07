@@ -20,6 +20,14 @@ MCUX=/Applications/MCUXpressoIDE_11.5.0_7232
 
 #-------
 
+# Choose the SDK components you want
+COMPONENTS=CMSIS codec component custom device drivers freertos hidparser littlevgl lwip mdio phy sdmmc startup touchpanel trustzone usb utilities video wifi xip
+SDK_DIR=sdk
+SDK_SOURCE_DIRS = $(foreach dir, $(COMPONENTS), $(addprefix $(SDK_DIR)/, $(dir)))
+SDK_SOURCES = $(foreach dir, $(SDK_SOURCE_DIRS), $(shell find $(dir) -name "*.c"))
+SDK_INCLUDES = $(foreach dir, $(SDK_SOURCE_DIRS), $(shell find $(dir) -name "*.h"))
+SDK_INCLUDE_DIRS = $(foreach dir, $(SDK_SOURCE_DIRS), $(shell find $(dir) -type 'd' | sed s/^/-I/))
+
 
 MCUX_TOOLS=$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.macosx_11.5.0.202107051138/tools
 MCUX_TOOLSBIN=$(MCUX)/ide/plugins/com.nxp.mcuxpresso.tools.bin.macosx_11.5.0.202112161150/binaries
@@ -55,10 +63,14 @@ FLASHFLAGS=--vendor NXP -p $(CHIP) --ConnectScript $(DEVICE)/$(CONNECT_SCRIPT) -
 
 DIR_OBJ = ./build
 
-INC_DIRS := $(shell find code -type 'd' | sed s/^/-I/)
-INCS := $(shell find code -name "*.h")
-SRCS := $(shell find code -name "*.c")
-OBJS = $(addprefix $(DIR_OBJ)/, $(SRCS:c=o))
+INCLUDE_DIRS := $(shell find source -type 'd' | sed s/^/-I/)
+INCLUDE_DIRS += $(SDK_INCLUDE_DIRS) -Isource -Isdk
+INCLUDES := $(shell find source -name "*.h")
+INCLUDES += $(SDK_INCLUDES)
+SOURCES := $(shell find source -name "*.c")
+SOURCES += $(SDK_SOURCES)
+
+OBJECTS = $(addprefix $(DIR_OBJ)/, $(SOURCES:c=o))
 
 
 all: $(TARGET).axf
@@ -67,12 +79,12 @@ clean:
 	rm -rf $(DIR_OBJ)/*
 	rm $(TARGET).axf
 
-$(TARGET).axf: $(OBJS)
+$(TARGET).axf: $(OBJECTS)
 	$(CC) $(LDFLAGS) $^ -o $@
 
-$(DIR_OBJ)/%.o: %.c $(INCS)
+$(DIR_OBJ)/%.o: %.c $(INCLUDES)
 	mkdir -p $(@D)
-	$(CC) -o $@ $(CFLAGS) -c $< -I$(INC_DIRS)
+	$(CC) -o $@ $(CFLAGS) -c $< -I$(INCLUDE_DIRS)
 
 flash: $(TARGET).axf
 	$(REDLINK) --flash-load-exec $(TARGET).axf $(FLASHFLAGS)
